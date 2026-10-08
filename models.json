@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "2026-10-08.2",
+  "version": "2026-10-08.3",
   "providers": {
     "deepseek": {
       "defaultModel": "deepseek-flash",
@@ -31,7 +31,7 @@
         },
         {
           "id": "gemini-3.7-flash",
-          "label": "Gemini 3.7 Flash",
+          "label": "Gemini 3.7 Flash（稳定）",
           "status": "active"
         },
         {
