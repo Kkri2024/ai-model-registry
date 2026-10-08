@@ -6,13 +6,16 @@ const PROVIDERS = ['deepseek', 'gemini'];
 const identifier = value => typeof value === 'string' && /^[a-zA-Z0-9][a-zA-Z0-9._-]{0,119}$/.test(value);
 
 export function validateCatalog(input) {
+  if (input && Object.keys(input).some(key => !['schemaVersion', 'version', 'providers'].includes(key))) throw new Error('Unexpected catalog fields');
   if (!input || input.schemaVersion !== 1 || !identifier(input.version)) throw new Error('Unsupported model catalog');
   if (Object.keys(input.providers || {}).some(id => !PROVIDERS.includes(id))) throw new Error('Unknown provider');
   const providers = {};
   for (const id of PROVIDERS) {
     const source = input.providers?.[id];
     if (!source || !Array.isArray(source.models) || !source.models.length || source.models.length > 100) throw new Error('Invalid provider');
+    if (Object.keys(source).some(key => !['models', 'defaultModel', 'migrations'].includes(key))) throw new Error('Unexpected provider fields');
     const models = source.models.map(item => {
+      if (item && Object.keys(item).some(key => !['id', 'label', 'status'].includes(key))) throw new Error('Unexpected model fields');
       if (!item || !['active', 'retired'].includes(item.status) || !identifier(item.id) || typeof item.label !== 'string' || !item.label.trim() || item.label.length > 160) throw new Error('Invalid model');
       return { id: item.id, label: item.label, status: item.status === 'retired' ? 'retired' : 'active' };
     });

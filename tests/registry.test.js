@@ -11,7 +11,7 @@ class MemoryStorage {
 }
 test('catalog validates both suppliers, duplicates, defaults, migrations and schema', () => {
   assert.equal(validateCatalog(copy()).version, BUILTIN_CATALOG.version);
-  for (const mutate of [c => c.schemaVersion = 2, c => c.providers.other = {}, c => c.providers.gemini.models.push(c.providers.gemini.models[0]), c => c.providers.gemini.defaultModel = 'unknown', c => c.providers.gemini.migrations.old = 'unknown']) {
+  for (const mutate of [c => c.schemaVersion = 2, c => c.apiKey = "forbidden", c => c.providers.deepseek.endpoint = "https://untrusted.invalid", c => c.providers.other = {}, c => c.providers.gemini.models.push(c.providers.gemini.models[0]), c => c.providers.gemini.defaultModel = 'unknown', c => c.providers.gemini.migrations.old = 'unknown']) {
     const c = copy(); mutate(c); assert.throws(() => validateCatalog(c));
   }
 });
