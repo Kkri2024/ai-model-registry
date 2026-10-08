@@ -13,7 +13,7 @@ export function validateCatalog(input) {
     const source = input.providers?.[id];
     if (!source || !Array.isArray(source.models) || !source.models.length || source.models.length > 100) throw new Error('Invalid provider');
     const models = source.models.map(item => {
-      if (!item || !identifier(item.id) || typeof item.label !== 'string' || !item.label.trim() || item.label.length > 160) throw new Error('Invalid model');
+      if (!item || !['active', 'retired'].includes(item.status) || !identifier(item.id) || typeof item.label !== 'string' || !item.label.trim() || item.label.length > 160) throw new Error('Invalid model');
       return { id: item.id, label: item.label, status: item.status === 'retired' ? 'retired' : 'active' };
     });
     const ids = models.map(item => item.id);
